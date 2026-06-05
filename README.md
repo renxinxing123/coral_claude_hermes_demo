@@ -2,8 +2,6 @@
 
 This demo shows how to connect **Claude Code** and **Hermes** as two independent AI agents that communicate through the [Coral Protocol](https://github.com/Coral-Protocol/coral-server) MCP server.
 
-![Data Flow](coral-dataflow.png)
-
 ## Prerequisites
 
 - **Coral Server** — cloned and buildable (Java 21+, Gradle)
@@ -27,12 +25,6 @@ coral_hermes_start/
 ```
 
 ## Setup
-
-### 0. Clone Coral Server
-
-```bash
-git clone https://github.com/Coral-Protocol/coral-server.git
-```
 
 ### 1. Configure Coral Server
 
