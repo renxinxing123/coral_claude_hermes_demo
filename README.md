@@ -1,6 +1,6 @@
 # Orchestrate Agent Harnesses with CoralOS -- Tutorial
 
-This demo shows how to connect **Claude Code** and **Hermes** as two independent AI agents that communicate through the [Coral Protocol](https://github.com/Coral-Protocol/coral-server) MCP server.
+This tutorial shows how to connect **Claude Code** and **Hermes** as two independent AI agents that communicate through the [Coral Protocol](https://github.com/Coral-Protocol/coral-server) MCP server.
 
 ![Data Flow](coral-dataflow.png)
 
@@ -119,6 +119,3 @@ When you create a session, Coral Server:
 
 The agents then communicate through Coral's MCP tools — creating threads, sending messages, and waiting for mentions.
 
-## License
-
-MIT
