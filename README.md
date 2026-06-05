@@ -2,11 +2,13 @@
 
 This demo shows how to connect **Claude Code** and **Hermes** as two independent AI agents that communicate through the [Coral Protocol](https://github.com/Coral-Protocol/coral-server) MCP server.
 
+![Data Flow](coral-dataflow.png)
+
 ## Prerequisites
 
 - **Coral Server** — cloned and buildable (Java 21+, Gradle)
-- **Claude Code** — installed (`npm install -g @anthropic-ai/claude-code`)
-- **Hermes** — installed (`pip install hermes-agent` or see [Hermes docs](https://github.com/hermes-ai/hermes-agent))
+- **Claude Code** — installed ([download](https://code.claude.com/docs/en/overview))
+- **Hermes** — installed ([download](https://hermes-agent.nousresearch.com/))
 - API keys configured for your preferred model provider
 
 ## Project Structure
