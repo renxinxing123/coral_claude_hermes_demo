@@ -1,4 +1,4 @@
-# Coral Protocol — Claude Code + Hermes Multi-Agent Demo
+# Orchestrate Agent Harnesses with CoralOS -- Tutorial
 
 This demo shows how to connect **Claude Code** and **Hermes** as two independent AI agents that communicate through the [Coral Protocol](https://github.com/Coral-Protocol/coral-server) MCP server.
 
