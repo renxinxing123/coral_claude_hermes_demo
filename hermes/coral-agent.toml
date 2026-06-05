@@ -1,0 +1,19 @@
+edition = 3
+
+[agent]
+name = "hermes-agent"
+version = "0.1.0"
+description = "Market research firm - specializing in competitive analysis, market sizing, and technology trend research via web search"
+
+readme = "Hermes agent bridge for Coral Protocol"
+summary = "Bridges Hermes to Coral for multi-agent communication"
+license = { type = "spdx", expression = "MIT" }
+
+[options.auto_launch]
+type = "string"
+default = "false"
+
+[runtimes.executable]
+path = "bash"
+arguments = ["startup.sh"]
+transport = "streamable_http"

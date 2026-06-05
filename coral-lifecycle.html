@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Coral Protocol Lifecycle</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --coral-400: #ff7a2e;
+    --coral-500: #ff5c00;
+    --coral-700: #b33d00;
+    --reef-400: #2dc0b8;
+    --reef-500: #14a39c;
+    --reef-900: #134746;
+    --ink-50: #f6f6f4;
+    --ink-100: #ececea;
+    --ink-200: #d9d9d5;
+    --ink-300: #b7b7b0;
+    --ink-400: #8a8a83;
+    --ink-500: #6d6d67;
+    --ink-600: #565651;
+    --ink-700: #3f3f3c;
+    --ink-800: #242422;
+    --ink-900: #161614;
+    --ink-950: #0c0c0b;
+    --canvas: #0A0A0A;
+    --hairline: rgba(246,246,244,0.09);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--canvas);
+    color: var(--ink-50);
+    min-height: 100vh;
+  }
+
+  /* Chrome bars */
+  .chrome-top {
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 48px;
+  }
+  .chrome-bottom {
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+  }
+
+  .wordmark {
+    font-family: 'Oxanium', 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .wordmark .wm-coral { color: var(--ink-50); }
+  .wordmark .wm-os { color: var(--ink-400); }
+  .wordmark svg { height: 26px; width: auto; }
+
+  /* Main content */
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 48px 40px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--coral-400);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 52px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--ink-50);
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: var(--ink-400);
+    font-size: 15px;
+    margin-bottom: 56px;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 48px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--coral-500), var(--reef-400), var(--ink-700));
+  }
+
+  .step {
+    position: relative;
+    margin-bottom: 44px;
+  }
+  .step:last-child { margin-bottom: 0; }
+
+  .step-marker {
+    position: absolute;
+    left: -48px;
+    top: 0;
+    width: 33px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 12px;
+    border: 1px solid var(--hairline);
+    background: var(--ink-900);
+  }
+  .step-marker.coral { color: var(--coral-500); border-color: rgba(255,92,0,0.25); }
+  .step-marker.reef { color: var(--reef-400); border-color: rgba(45,192,184,0.25); }
+  .step-marker.ink { color: var(--ink-300); }
+
+  .step-card {
+    border: 1px solid var(--hairline);
+    background: var(--ink-900);
+    padding: 24px 28px;
+  }
+
+  .step-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink-50);
+    margin-bottom: 10px;
+  }
+  .step-title .accent { color: var(--coral-400); }
+  .step-title .reef-accent { color: var(--reef-400); }
+
+  .step-body {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-300);
+  }
+  .step-body code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.04);
+    padding: 2px 6px;
+    color: var(--ink-200);
+  }
+
+  .code-block {
+    margin: 10px 0 6px;
+    padding: 14px 18px;
+    background: var(--ink-950);
+    border: 1px solid var(--hairline);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.8;
+    color: var(--ink-400);
+  }
+  .code-block .key { color: var(--ink-300); }
+  .code-block .val-coral { color: var(--coral-400); }
+  .code-block .val-reef { color: var(--reef-400); }
+  .code-block .val { color: var(--ink-200); }
+  .code-block .comment { color: var(--ink-600); }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .tag-coral { background: rgba(255,92,0,0.1); color: var(--coral-400); border: 1px solid rgba(255,92,0,0.15); }
+  .tag-reef { background: rgba(45,192,184,0.08); color: var(--reef-400); border: 1px solid rgba(45,192,184,0.12); }
+
+  /* ==================== DATA FLOW ==================== */
+  .flow-section {
+    margin-top: 64px;
+    padding-top: 48px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .flow-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    color: var(--ink-50);
+    margin-bottom: 40px;
+  }
+
+  .flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .flow-connector {
+    text-align: center;
+    padding: 14px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-500);
+    position: relative;
+  }
+  .flow-connector::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: var(--ink-700);
+    z-index: -1;
+  }
+  .flow-connector span {
+    background: var(--canvas);
+    padding: 2px 12px;
+    position: relative;
+  }
+
+  .flow-box {
+    padding: 16px 22px;
+    border: 1px solid var(--hairline);
+    font-size: 13px;
+    text-align: center;
+    min-width: 160px;
+    background: var(--ink-900);
+  }
+  .flow-box .box-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .flow-box .box-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-400);
+    line-height: 1.6;
+  }
+
+  .flow-box.b-coral { border-color: rgba(255,92,0,0.2); }
+  .flow-box.b-coral .box-title { color: var(--coral-400); }
+  .flow-box.b-reef { border-color: rgba(45,192,184,0.18); }
+  .flow-box.b-reef .box-title { color: var(--reef-400); }
+  .flow-box.b-ink .box-title { color: var(--ink-200); }
+  .flow-box.b-env { border-color: rgba(255,92,0,0.12); background: rgba(255,92,0,0.03); }
+  .flow-box.b-env .box-title { color: var(--coral-500); }
+
+  .flow-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: var(--ink-600);
+  }
+
+  .flow-pair {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .flow-pair .flow-box { flex: 0 1 320px; }
+
+  .flow-trio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top chrome -->
+<div class="chrome-top">
+  <div class="wordmark">
+    <svg width="199" height="210" viewBox="0 0 199 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="coralMarkGrad" x1="99.5" y1="0" x2="99.5" y2="202" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#FF5C00" />
+          <stop offset="1" stop-color="#FF9801" />
+        </linearGradient>
+      </defs>
+      <path d="M111.01 0V39.5979H100.232V29.0299H87.9879V9.99496H68.7925V29.0299H79.1236V49.4018H92.1331V59.5241H100.232V69.7737H82.8224V59.5241H58.9716V49.4018H47.939V29.0299H35.8223V59.5241H47.939V69.7737H72.2362V79.6413H94.7478V90.0183H106.354V100.332H111.329V130.826H100.551V110.645H91.2403V100.077H80.2077V90.6549H47.939V110.645H76.9554V120.64H87.1589V146.996H69.9404V131.144H58.8441V120.64H35.2484V90.6549H24.4709V69.5827H4.19131V90.6549H12.8006V110.645H24.4709V131.144L35.2484 131.144V141.485H58.9176V151.776H24.4703V131.144H4V141.521H12.8006V161.957H29.1262V171.888H47.7477V161.957H73.5754V171.888H79.1236V191.305H89.7735V202H111.329V191.305H122.552V171.888H144.299V161.957H154.566V171.824H170.509V151.516H154.566V141.266H170.509V130.826H183.2V141.266H195V120.831H175.228V100.332H189.832V90.3366H195V79.9597H189.832V59.5878H175.228V79.9597H164.642V110.263H154.566V130.826H143.661V140.439H134.223V161.957H114.198V171.888H111.329V182.328H100.87V151.643H111.329V141.394H122.935V130.826H134.223V100.332H145.957V69.2644H158.966V49.2108H164.578V29.2209H147.998V59.5878H134.223V90.0183H122.935V79.6413H111.01V49.2108H122.935V39.5979H133.011V19.8626H122.935V0H111.01Z" fill="url(#coralMarkGrad)" />
+    </svg>
+    <span><span class="wm-coral">Coral</span><span class="wm-os">OS</span></span>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="eyebrow">Infrastructure</div>
+  <h1>Protocol Lifecycle</h1>
+  <p class="subtitle">From configuration to multi-agent collaboration</p>
+
+  <!-- ====== TIMELINE ====== -->
+  <div class="timeline">
+
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="step-marker coral">01</div>
+      <div class="step-card">
+        <div class="step-title"><span class="accent">Configure</span> Coral Server</div>
+        <div class="step-body">
+          Edit <code>config.toml</code> to register agent directories. Coral Server scans each path for <code>coral-agent.toml</code>.
+          <div class="code-block">
+            <span class="comment"># config.toml</span><br>
+            <span class="key">local_agents</span> = [<br>
+            &nbsp;&nbsp;"<span class="val-coral">./hermes</span>",<br>
+            &nbsp;&nbsp;"<span class="val-coral">./claude_code</span>"<br>
+            ]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="step-marker coral">02</div>
+      <div class="step-card">
+        <div class="step-title"><span class="accent">Configure</span> Each Agent</div>
+        <div class="step-body">
+          Each agent directory contains two files that define identity and bootstrap behavior.
+          <div class="code-block">
+            <span class="val-coral">hermes/</span><br>
+            &nbsp;&nbsp;<span class="val">coral-agent.toml</span> <span class="comment">-- name, description, runtime</span><br>
+            &nbsp;&nbsp;<span class="val">startup.sh</span> <span class="comment">-- receives MCP URL, patches config</span><br><br>
+            <span class="val-reef">claude_code/</span><br>
+            &nbsp;&nbsp;<span class="val">coral-agent.toml</span> <span class="comment">-- name, description, runtime</span><br>
+            &nbsp;&nbsp;<span class="val">startup.sh</span> <span class="comment">-- writes .mcp.json with MCP URL</span>
+          </div>
+          <span class="tag tag-coral">coral-agent.toml defines [runtimes.executable]</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="step-marker reef">03</div>
+      <div class="step-card">
+        <div class="step-title"><span class="reef-accent">Start</span> Coral Server</div>
+        <div class="step-body">
+          <code>./gradlew run</code><br><br>
+          Server starts on <code>http://localhost:5555</code>. Reads all <code>coral-agent.toml</code> files and registers agents. Console available at <code>/ui/console</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+      <div class="step-marker reef">04</div>
+      <div class="step-card">
+        <div class="step-title"><span class="reef-accent">Create</span> a Session</div>
+        <div class="step-body">
+          POST to <code>/api/v1/local/session</code> specifying which agents to include.
+          <div class="code-block">
+            <span class="key">agents</span>: [<br>
+            &nbsp;&nbsp;{ name: "<span class="val-coral">hermes-agent</span>" },<br>
+            &nbsp;&nbsp;{ name: "<span class="val-reef">claude-code-agent</span>" }<br>
+            ]<br>
+            <span class="key">groups</span>: [["<span class="val-coral">hermes-agent</span>", "<span class="val-reef">claude-code-agent</span>"]]
+          </div>
+          <span class="tag tag-reef">Coral Server generates a unique MCP URL per agent</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step">
+      <div class="step-marker coral">05</div>
+      <div class="step-card">
+        <div class="step-title">Coral <span class="accent">Executes</span> startup.sh</div>
+        <div class="step-body">
+          For each agent, Coral runs <code>bash startup.sh</code> with environment variables.
+          <div class="code-block">
+            <span class="val-coral">$CORAL_CONNECTION_URL</span> <span class="comment">-- unique MCP endpoint</span><br>
+            <span class="val-coral">$CORAL_AGENT_ID</span> <span class="comment">-- agent name</span><br>
+            <span class="val-coral">$CORAL_SESSION_ID</span> <span class="comment">-- session UUID</span>
+          </div>
+          <b style="color:var(--coral-400)">Hermes</b> — patches global <code>~/.hermes/config.yaml</code> with MCP URL<br>
+          <b style="color:var(--reef-400)">Claude Code</b> — writes <code>.mcp.json</code> with MCP URL
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step">
+      <div class="step-marker ink">06</div>
+      <div class="step-card">
+        <div class="step-title">User Starts Agents <span class="accent">Manually</span></div>
+        <div class="step-body">
+          In separate terminals:
+          <div class="code-block">
+            <span class="val-coral">Terminal 1 (Hermes):</span><br>
+            &nbsp;&nbsp;$ <span class="val">hermes chat</span><br><br>
+            <span class="val-reef">Terminal 2 (Claude Code):</span><br>
+            &nbsp;&nbsp;$ cd claude_code && <span class="val">claude</span>
+          </div>
+          Both agents connect to Coral via MCP and can communicate through threads and messages.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ====== DATA FLOW ====== -->
+  <div class="flow-section">
+    <div class="eyebrow">Architecture</div>
+    <div class="flow-title">Data Flow — How Agents Get Their MCP URL</div>
+
+    <div class="flow-container">
+
+      <!-- Row 1: config.toml -->
+      <div class="flow-row">
+        <div class="flow-box b-ink" style="min-width:280px">
+          <div class="box-title">config.toml</div>
+          <div class="box-sub">local_agents = ["./hermes", "./claude_code"]</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box b-coral">
+          <div class="box-title">Coral Server</div>
+          <div class="box-sub">scans directories</div>
+        </div>
+      </div>
+
+      <div class="flow-connector"><span>reads coral-agent.toml from each directory</span></div>
+
+      <!-- Row 2: coral-agent.toml -->
+      <div class="flow-row">
+        <div class="flow-box b-coral" style="min-width:270px; text-align:left">
+          <div class="box-sub">
+            <span style="color:var(--coral-400)">hermes/</span><b style="color:var(--ink-200)">coral-agent.toml</b><br>
+            name = "hermes-agent"<br>
+            [runtimes.executable]<br>
+            path = "bash", args = ["startup.sh"]
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box b-coral">
+          <div class="box-title">Coral Server</div>
+          <div class="box-sub">registers agents</div>
+        </div>
+        <div class="flow-arrow">&larr;</div>
+        <div class="flow-box b-reef" style="min-width:270px; text-align:left">
+          <div class="box-sub">
+            <span style="color:var(--reef-400)">claude_code/</span><b style="color:var(--ink-200)">coral-agent.toml</b><br>
+            name = "claude-code-agent"<br>
+            [runtimes.executable]<br>
+            path = "bash", args = ["startup.sh"]
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-connector"><span>server starts, agents registered, waiting for session</span></div>
+
+      <!-- Row 3: User creates session -->
+      <div class="flow-row">
+        <div class="flow-box b-ink" style="min-width:300px">
+          <div class="box-title" style="color:var(--ink-200)">User</div>
+          <div class="box-sub">curl POST /api/v1/local/session<br>agents: [hermes-agent, claude-code-agent]</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box b-coral" style="min-width:280px">
+          <div class="box-title">Coral Server</div>
+          <div class="box-sub">creates session + generates<br>unique MCP URL per agent</div>
+        </div>
+      </div>
+
+      <div class="flow-connector"><span>for each agent: exec "bash startup.sh" with env vars</span></div>
+
+      <!-- Row 4: env vars -->
+      <div class="flow-row">
+        <div class="flow-box b-coral" style="min-width:180px">
+          <div class="box-title">Coral Server</div>
+          <div class="box-sub">exec bash startup.sh</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box b-env" style="min-width:400px; text-align:left">
+          <div class="box-title" style="text-align:center">Environment Variables</div>
+          <div class="box-sub" style="text-align:left">
+            $CORAL_CONNECTION_URL = http://localhost:5555/mcp/v1/<b style="color:var(--coral-500)">{uuid}</b>/mcp<br>
+            $CORAL_AGENT_ID = hermes-agent | claude-code-agent<br>
+            $CORAL_SESSION_ID = {session-uuid}
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-connector"><span>each startup.sh injects MCP URL into agent config</span></div>
+
+      <!-- Row 5: startup.sh per agent -->
+      <div class="flow-pair">
+        <div class="flow-box b-coral" style="text-align:left">
+          <div class="box-title" style="text-align:center">Hermes startup.sh</div>
+          <div class="box-sub" style="text-align:left">
+            patches <b style="color:var(--ink-200)">~/.hermes/config.yaml</b><br>
+            mcp_servers:<br>
+            &nbsp;&nbsp;coral:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;url: "$CORAL_CONNECTION_URL"
+          </div>
+        </div>
+        <div class="flow-box b-reef" style="text-align:left">
+          <div class="box-title" style="text-align:center">Claude Code startup.sh</div>
+          <div class="box-sub" style="text-align:left">
+            writes <b style="color:var(--ink-200)">claude_code/.mcp.json</b><br>
+            { "mcpServers": { "coral": {<br>
+            &nbsp;&nbsp;"url": "$CORAL_CONNECTION_URL"<br>
+            }}}
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-connector"><span>user starts agents manually in separate terminals</span></div>
+
+      <!-- Row 6: Communication -->
+      <div class="flow-trio">
+        <div class="flow-box b-coral">
+          <div class="box-title">hermes chat</div>
+        </div>
+        <div class="flow-arrow">&harr;</div>
+        <div class="flow-box b-coral" style="min-width:220px; border-color: rgba(255,92,0,0.3)">
+          <div class="box-title">Coral MCP Server</div>
+          <div class="box-sub">threads, messages, state</div>
+        </div>
+        <div class="flow-arrow">&harr;</div>
+        <div class="flow-box b-reef">
+          <div class="box-title">claude</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom chrome -->
+<div class="chrome-bottom">
+  <span>CoralOS &middot; The Multi-Agent Coordination Protocol</span>
+  <span>coralos.ai</span>
+</div>
+
+</body>
+</html>

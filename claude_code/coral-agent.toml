@@ -1,0 +1,20 @@
+edition = 3
+
+[agent]
+name = "claude-code-agent"
+version = "0.1.0"
+description = "SaaS product company PM - looking for Node.js microservice development and SOC 2 security audit services"
+
+readme = "Claude Code agent bridge for Coral Protocol"
+summary = "Bridges Claude Code to Coral for multi-agent communication"
+
+license = { type = "spdx", expression = "MIT" }
+
+[options.auto_launch]
+type = "string"
+default = "false"
+
+[runtimes.executable]
+path = "bash"
+arguments = ["startup.sh"]
+transport = "streamable_http"
