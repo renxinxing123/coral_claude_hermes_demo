@@ -32,16 +32,17 @@ BASELINE=$(printf '%s' "$STATE" | count_messages)
 echo ">> baseline: $BASELINE message(s) currently visible in the session"
 echo ">> waiting for a mention (maxWaitMs=$MAX_WAIT_MS per round) ..."
 
+WAIT_ARGS=$(json_kv '#maxWaitMs' "$MAX_WAIT_MS")
 round=0
 while true; do
   round=$((round + 1))
-  RESP=$(mcp_tool_call "$URL" "$SID" "coral_wait_for_mention" "{\"maxWaitMs\":$MAX_WAIT_MS}")
+  RESP=$(mcp_tool_call "$URL" "$SID" "coral_wait_for_mention" "$WAIT_ARGS")
 
-  MSG=$(printf '%s' "$RESP" | jq -c '.result.structuredContent.message // empty' 2>/dev/null)
+  MSG=$(printf '%s' "$RESP" | json_get 'result.structuredContent.message' 2>/dev/null)
   if [ -n "$MSG" ]; then
     echo ""
     echo "=== [round $round] MENTION RECEIVED (via coral_wait_for_mention) ==="
-    printf '%s' "$MSG" | jq .
+    printf '%s' "$MSG" | json_pretty; echo
     break
   fi
 

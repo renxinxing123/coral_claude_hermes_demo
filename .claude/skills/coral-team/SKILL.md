@@ -31,8 +31,9 @@ each time you log in** — do not guess it.
 | `send_message.sh` | Send a message in a thread (as you) | `bash "$SCRIPTS/send_message.sh" "$MY_URL" <threadId> <content> [mentionsCSV]` |
 | `wait_for_mention.sh` | Block waiting to be mentioned; also breaks on any new message in the resource | `bash "$SCRIPTS/wait_for_mention.sh" "$MY_URL" <maxWaitMs> <maxRounds>` |
 
-Needs `jq` and `curl` on PATH. If `jq` is missing, install it first (`conda install -c conda-forge jq`
-or the system package manager) — without it the scripts spin and print `jq: command not found`.
+Needs only `curl` and `python3` on PATH — both are normally preinstalled (no `jq` required; JSON is
+handled by the bundled `scripts/coral_json.py`, stdlib only). If `python3` is under another name, set
+`CORAL_PY` (e.g. `export CORAL_PY=python`).
 
 ## On login (activation)
 

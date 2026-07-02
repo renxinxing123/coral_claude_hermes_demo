@@ -12,4 +12,4 @@ if [ $# -lt 1 ]; then echo "usage: $0 <AGENT_MCP_URL> [resourceUri]" >&2; exit 1
 URL="$1"; URI="${2:-coral://state}"
 
 SID=$(mcp_init "$URL") || exit 1
-mcp_resource_read "$URL" "$SID" "$URI"
+mcp_resource_read "$URL" "$SID" "$URI"; echo
